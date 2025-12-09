@@ -466,59 +466,143 @@ html, body, #root {
 .signature-space { height: 100px; }
 
 /* =========================================
-   9. PRINT STYLES (In ấn)
+   9. PRINT STYLES (A4 - Không nền xám)
    ========================================= */
 @media print {
-  @page { margin: 1.5cm; size: A4; }
+  @page {
+    size: A4;
+    margin: 1.5cm; /* Lề nhỏ 0.5cm */
+  }
 
-  .no-print, .app-header, .btn, .print-actions, .inline-options input {
+  /* 1. ẨN CÁC PHẦN KHÔNG CẦN THIẾT */
+  .no-print, 
+  .app-header, 
+  .btn, 
+  .print-actions, 
+  .inline-options input,
+  .detail-header-bar .print-actions,
+  .app-header-actions,
+  .btn-ghost {
     display: none !important;
   }
 
-  body, .app-shell, .app-body, .card {
-    background: white !important;
+  /* 2. RESET MÀU SẮC VÀ NỀN (QUAN TRỌNG) */
+  *, *::before, *::after {
+    /* Buộc tất cả nền thành trong suốt để không in ra màu xám */
+    background-color: transparent !important; 
+    /* Buộc chữ thành màu đen */
+    color: #000 !important; 
+    /* Bỏ đổ bóng */
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* 3. CẤU TRÚC TRANG IN */
+  html, body {
+    width: 100%;
     margin: 0 !important;
     padding: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
-    width: 100% !important;
+    font-size: 10pt; /* Cỡ chữ 10pt vừa vặn */
+    line-height: 1.3;
   }
 
-  body { font-size: 12pt; color: #000; line-height: 1.4; }
+  .app-shell, .app-body, .card {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
 
-  .section-title, .form-section h3 {
-    border: none;
-    background: none;
-    padding: 0;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-size: 14pt;
+  /* 4. TIÊU ĐỀ SECTION GỌN GÀNG */
+  .section-title, .form-section h3, .card-title {
+    font-size: 12pt !important;
+    font-weight: 800;
     text-transform: uppercase;
-    border-bottom: 2px solid #000;
+    margin: 10px 0 5px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-bottom: 2px solid #000 !important; /* Chỉ giữ lại gạch chân đen */
     display: block;
     width: 100%;
-    color: #000 !important;
   }
 
+  /* 5. LAYOUT 2 CỘT (LUÔN NGANG) */
   .detail-two-column {
-    display: flex;
-    flex-direction: row !important; /* Luôn xếp ngang khi in */
-    gap: 20px;
-    margin-bottom: 10px;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 20px !important;
+    margin-bottom: 5px !important;
   }
   
-  .detail-col { width: auto; flex: 1; }
+  .detail-col {
+    flex: 1;
+    width: 50% !important;
+  }
 
+  /* 6. DÒNG DỮ LIỆU (Label - Value) */
   .detail-row {
-    grid-template-columns: 140px 1fr;
-    padding: 4px 0;
-    border-bottom: 1px dotted #ccc;
-    font-size: 11pt;
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 5px;
+    padding: 3px 0 !important;
+    border-bottom: 1px dotted #999; /* Đường chấm bi mờ nhẹ */
+    align-items: center;
+    page-break-inside: avoid;
+  }
+
+  .detail-row-label {
+    font-weight: 700;
+  }
+
+  /* 7. XỬ LÝ BẢNG (TABLE) */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+  }
+
+  .table th {
+    /* Đảm bảo tiêu đề bảng không có nền xám */
+    border-bottom: 2px solid #000 !important;
+    font-weight: bold;
+    text-align: left;
+    padding: 4px;
+  }
+
+  .table td {
+    border-bottom: 1px solid #ccc !important;
+    padding: 4px;
+  }
+
+  /* 8. FORM & INPUTS */
+  .form-section {
+    padding: 0 !important;
+    margin-bottom: 10px !important;
   }
   
-  .signature-row { margin-top: 30px; border-top: none; page-break-inside: avoid; }
-}
+  /* Ẩn khung của input khi in, chỉ hiện chữ */
+  .form-input, .form-textarea {
+    border: none !important;
+    padding: 0 !important;
+    height: auto !important;
+  }
+  
+  /* 9. CHỮ KÝ */
+  .signature-row {
+    margin-top: 20px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid #000;
+    display: flex;
+    justify-content: space-around;
+    page-break-inside: avoid;
+  }
 
+  .signature-space {
+    height: 70px !important;
+  }
+}
 /* =========================================
    10. RESPONSIVE MOBILE (Điện thoại)
    ========================================= */
